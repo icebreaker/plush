@@ -1,0 +1,154 @@
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Plush 3D Demo</title>
+		<style type="text/css">
+		body
+		{
+			width: 1024px;
+			margin: 0 auto;
+			padding-top: 64px;
+		}
+
+		canvas
+		{
+			border: 0;
+			padding: 0;
+			background-color: black;
+		}
+
+		button
+		{
+			background: #B90000;
+			color: white;
+			font-size: 18px;
+			font-weight: bolder;
+			text-align: center;
+			cursor: pointer;
+			width: 128px;
+			height: 64px;
+			border: 0.3em outset #FFD700 !important;
+			position: absolute;
+			z-index: 999;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			margin: auto;
+		}
+
+		button:active
+		{
+			border: 0.3em inset #FFD700 !important;
+		}
+
+		@keyframes loaderspin
+		{
+			0%
+			{
+				transform: rotate(0deg);
+			}
+			100%
+			{
+				transform: rotate(360deg);
+			}
+		}
+
+		#loader
+		{
+			border: 16px solid #FFD700;
+			border-top: 16px solid #B90000;
+			border-radius: 50%;
+			width: 64px;
+			height: 64px;
+			animation: loaderspin 2s linear infinite;
+			z-index: 999;
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			margin: auto;
+			display: none;
+		}
+		</style>
+	</head>
+	<body>
+		<button onclick="Module.Run('demo.js', this);">Start</button>
+		<div id="loader"></div>
+		<canvas id="canvas" width="1024" height="768" oncontextmenu="event.preventDefault()"></canvas>
+		<p>This is an&nbsp;<a target="_blank" href="https://emscripten.org/">emscripten</a>&nbsp;<em>port</em>&nbsp;of&nbsp;<a target="_blank" href="https://1014.org/code/nullsoft/plush/">Plush</a>&nbsp;by&nbsp;<a target="_blank" href="https://1014.org/">Justin "time compiler" Frankel</a>.</p>
+		<p>Source code:&nbsp;<a target="_blank" href="https://github.com/icebreaker/plush">github</a></p>
+		<script type="text/javascript">
+			var Module =
+			{
+				preRun: [],
+				postRun: [],
+				print: function(text)
+				{
+					if(arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+					console.log(text);
+				},
+				printErr: function(text)
+				{
+					if(arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+					console.log(text);
+				},
+				canvas: (function()
+				{
+					var canvas = document.getElementById('canvas');
+					canvas.addEventListener(
+						'webglcontextlost',
+						function(e)
+						{
+							alert('WebGL context lost. You will need to reload the page.');
+							e.preventDefault();
+						},
+						false
+					);
+					return canvas;
+				})(),
+				button: document.getElementById('button'),
+				loader: document.getElementById('loader'),
+				setStatus: function(text)
+				{
+					if(!text)
+					{
+						var loader = Module.loader;
+						if(loader)
+							loader.style.display = "none";
+
+						console.log('Module loaded ...');
+					}
+					else
+					{
+						console.log(text);
+					}
+				},
+				monitorRunDependencies: (left) =>
+				{
+						// no-op
+				},
+				arguments: [],
+				Run: function(src, button, loader)
+				{
+					var button = button || Module.button;
+					var loader = loader || Module.loader;
+
+					if(button)
+						button.style.display = 'none';
+
+					if(loader)
+						loader.style.display = 'block';
+
+					var script = document.createElement('script');
+					script.async = true;
+					script.src = src;
+					document.body.appendChild(script);
+				}
+			};
+		</script>
+		<!-- {{{ SCRIPT }}} -->
+	</body>
+</html>

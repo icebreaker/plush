@@ -1,0 +1,25 @@
+if [ -z $DOT_MAKE_TARGET ]; then
+	DOT_MAKE_TARGET=build/demo
+fi
+
+function build()
+{
+	cc -O3 -Werror `sdl2-config --libs --cflags` -lm demo.c -o $DOT_MAKE_TARGET
+}
+
+function execute()
+{
+	build && $DOT_MAKE_TARGET
+}
+
+function generate()
+{
+	echo 'Nothing to generate.'
+}
+
+function clean()
+{
+	rm -f $DOT_MAKE_TARGET
+}
+
+# vim: set ft=bash:
