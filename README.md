@@ -20,7 +20,8 @@ To compile it to [WASM][wasm] and run it on the web via [Emscripten][emscripten]
 incantations instead:
 
 ```bash
-$ emcc -O2 --preload-file data/ --shell-file shell.html -s USE_SDL=2 -s ALLOW_MEMORY_GROWTH=1 demo.c -o build/demo.html
+$ emcc -O2 --preload-file data/ --shell-file shell.html \
+        -s USE_SDL=2 -s ALLOW_MEMORY_GROWTH=1 demo.c -o build/demo.html
 $ emrun build/demo.html
 ```
 
